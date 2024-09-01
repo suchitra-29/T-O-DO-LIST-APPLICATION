@@ -1,0 +1,41 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import TaskItem from './TaskItem';
+import AddTask from './AddTask';
+
+function TaskList() {
+  const [tasks, setTasks] = useState([]);
+
+  const fetchTasks = async () => {
+    const result = await axios.get('http://localhost:5000/api/tasks');
+    setTasks(result.data);
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const handleUpdate = () => {
+    fetchTasks();
+  };
+
+  const handleDelete = () => {
+    fetchTasks();
+  };
+
+  return (
+    <div>
+      <AddTask />
+      {tasks.map(task => (
+        <TaskItem 
+          key={task._id} 
+          task={task} 
+          onUpdate={handleUpdate} 
+          onDelete={handleDelete} 
+        />
+      ))}
+    </div>
+  );
+}
+
+export default TaskList;
